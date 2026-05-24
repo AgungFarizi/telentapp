@@ -119,13 +119,11 @@
 
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-5 py-6">
-            <div class="flex-shrink-0 w-11 h-11 bg-telent-green rounded-xl flex items-center justify-center shadow-sm">
-                {{-- Graduation cap icon --}}
-                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                    <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
-                </svg>
-            </div>
+            <img
+                src="{{ asset('images/logo-telentapp.png') }}"
+                alt="TELENT Logo"
+                class="flex-shrink-0 w-11 h-11 object-contain"
+            >
             <div x-show="!sidebarCollapsed" x-cloak class="overflow-hidden leading-tight">
                 <div class="text-telent-green font-extrabold text-xl tracking-tight">TELENT</div>
                 <div class="text-slate-400 text-xs font-medium">Internship System</div>

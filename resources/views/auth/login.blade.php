@@ -1,15 +1,26 @@
 @extends('layouts.auth')
 
-@section('title', 'Masuk ke TELENT')
+@section('title', 'Masuk — Portal Resmi Magang PT. Tanjungenim Lestari')
 
 @section('content')
 
-{{-- ── Heading ── --}}
+{{-- ── Logo + Heading ── --}}
 <div class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+        <img
+            src="{{ asset('images/logo-telentapp.png') }}"
+            alt="TELENT Logo"
+            class="h-12 w-12 object-contain flex-shrink-0"
+        >
+        <div>
+            <div class="text-xl font-extrabold text-gray-900 tracking-wide leading-none">TELENT</div>
+            <div class="text-green-700 text-xs font-semibold tracking-widest mt-0.5">Intership Management</div>
+        </div>
+    </div>
     <h1 class="text-[1.85rem] font-extrabold text-gray-900 tracking-tight leading-tight">
-        Masuk ke TELENT
+        Selamat Datang
     </h1>
-    <p class="text-gray-500 text-sm mt-1">Akses sistem manajemen industri terpadu</p>
+    <p class="text-gray-500 text-sm mt-1">Portal resmi magang PT. Tanjungenim Lestari</p>
 </div>
 
 {{-- ── Success alert ── --}}
@@ -206,7 +217,7 @@
         <a href="#" class="text-xs text-gray-400 hover:text-gray-600 transition-colors">Kontak</a>
     </div>
     <p class="text-center text-xs text-gray-400">
-        © 2024 TELENT (PT. Tanjungenim Lestari Pulp and Paper). Seluruh hak cipta dilindungi.
+        © 2026 TELENT (PT. Tanjungenim Lestari Pulp and Paper). Seluruh hak cipta dilindungi.
     </p>
 </div>
 
