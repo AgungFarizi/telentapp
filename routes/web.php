@@ -139,6 +139,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
 // PEMBIMBING LAPANG ROUTES
 // ============================================================
 Route::prefix('pembimbing')->name('pembimbing.')->middleware(['auth', 'role:pembimbing_lapang'])->group(function () {
+
     Route::get('/dashboard', [PembimbingLapangController::class, 'dashboard'])->name('dashboard');
 
     // Mahasiswa Bimbingan
@@ -161,11 +162,18 @@ Route::prefix('pembimbing')->name('pembimbing.')->middleware(['auth', 'role:pemb
     });
 
     // Laporan
-    Route::get('/laporan', [PembimbingLapangController::class, 'laporan'])->name('laporan');
+    Route::get('/laporan', [PembimbingLapangController::class, 'laporan'])
+        ->name('laporan');
+
+    Route::get('/laporan/pdf/{mahasiswa}', [PembimbingLapangController::class, 'laporanPdf'])
+        ->name('laporan.pdf');
 
     // Profil
-    Route::get('/profil', [PembimbingLapangController::class, 'profil'])->name('profil');
-    Route::put('/profil', [PembimbingLapangController::class, 'profilUpdate'])->name('profil.update');
+    Route::get('/profil', [PembimbingLapangController::class, 'profil'])
+        ->name('profil');
+
+    Route::put('/profil', [PembimbingLapangController::class, 'profilUpdate'])
+        ->name('profil.update');
 });
 
 // ============================================================

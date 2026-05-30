@@ -9,6 +9,7 @@ use App\Models\Notifikasi;
 use App\Models\Pengguna;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PembimbingLapangController extends Controller
 {
@@ -311,6 +312,62 @@ class PembimbingLapangController extends Controller
 
         return view('pembimbing.laporan.index', compact('rekap', 'mahasiswaBimbingan', 'kehadiran'));
     }
+
+    
+    // ============================================================
+    // EKSPOR LAPORAN KE PDF
+    // ============================================================
+    public function laporanPdf($mahasiswaId)
+    {   
+        $pembimbing = auth()->user();
+
+        // Validasi mahasiswa milik pembimbing
+        $mahasiswa = Pengguna::where('id', $mahasiswaId)
+            ->where('pembimbing_id', $pembimbing->id)
+            ->firstOrFail();
+
+        // Proposal aktif
+        $proposal = Proposal::where(function ($q) use ($mahasiswa) {
+            $q->where('pengaju_id', $mahasiswa->id)
+                ->orWhereHas('anggota', function ($q) use ($mahasiswa) {
+                    $q->where('mahasiswa_id', $mahasiswa->id);
+                });
+        })
+        ->where('status', 'disetujui')
+        ->latest()
+        ->first();
+
+        // Data kehadiran
+        $kehadiran = Kehadiran::where('mahasiswa_id', $mahasiswa->id)
+            ->orderBy('tanggal', 'asc')
+            ->get();
+
+        // Data log harian
+        $logs = LogHarian::where('mahasiswa_id', $mahasiswa->id)
+            ->orderBy('tanggal', 'asc')
+            ->get();
+
+        // Rekap
+        $rekap = [
+            'hadir' => $kehadiran->where('status', 'hadir')->count(),
+            'terlambat' => $kehadiran->where('status', 'terlambat')->count(),
+            'izin' => $kehadiran->whereIn('status', ['izin', 'sakit'])->count(),
+            'tidak_hadir' => $kehadiran->where('status', 'tidak_hadir')->count(),
+        ];
+
+        $pdf = Pdf::loadView('pembimbing.laporan.pdf', compact(
+            'mahasiswa',
+            'proposal',
+            'kehadiran',
+            'logs',
+            'rekap'
+        ))->setPaper('a4', 'portrait');
+
+        return $pdf->download(
+            'laporan-magang-' . $mahasiswa->nama_lengkap . '.pdf'
+        );
+    }
+
 
     // ============================================================
     // PROFIL
