@@ -62,12 +62,19 @@ class MahasiswaController extends Controller
     public function proposalIndex()
     {
         $mahasiswa = auth()->user();
+
         $proposals = Proposal::where('pengaju_id', $mahasiswa->id)
             ->with(['periode', 'anggota'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('mahasiswa.proposal.index', compact('proposals'));
+        $sudahPunyaProposal = Proposal::where('pengaju_id', $mahasiswa->id)
+            ->exists();
+
+        return view('mahasiswa.proposal.index', compact(
+            'proposals',
+            'sudahPunyaProposal'
+        ));
     }
 
     public function proposalCreate()

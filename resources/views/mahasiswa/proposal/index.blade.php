@@ -9,19 +9,146 @@
 
 @section('content')
 
-<!-- Page Header -->
-<div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <div>
-        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Proposal Saya</h1>
-        <p class="text-sm text-slate-500 mt-1">Kelola pengajuan proposal magang kamu</p>
+@if(!$sudahPunyaProposal)
+
+<div class="bg-white border border-slate-200 rounded-2xl p-8 mb-8">
+
+    <div class="mb-8">
+        <h2 class="text-3xl font-bold text-slate-900 mb-2">
+            Selamat datang di portal magang TELENT
+        </h2>
+
+        <p class="text-slate-600">
+            Pastikan Anda membaca seluruh alur pengajuan sebelum memulai proposal.
+        </p>
     </div>
-    <a href="{{ route('mahasiswa.proposal.create') }}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow-sm transition">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Ajukan Proposal
-    </a>
+
+    {{-- STEP PROGRESS --}}
+    <div class="grid md:grid-cols-3 gap-6 mb-10">
+
+        <div class="border rounded-xl p-5">
+            <div class="text-lg font-semibold mb-2">
+                1. Lengkapi Profil
+            </div>
+
+            <p class="text-sm text-slate-500">
+                Pastikan data diri dan kontak sudah benar.
+            </p>
+        </div>
+
+        <div class="border rounded-xl p-5">
+            <div class="text-lg font-semibold mb-2">
+                2. Siapkan Dokumen
+            </div>
+
+            <p class="text-sm text-slate-500">
+                Siapkan proposal PDF dan surat pengantar kampus.
+            </p>
+        </div>
+
+        <div class="border rounded-xl p-5">
+            <div class="text-lg font-semibold mb-2">
+                3. Pilih Divisi
+            </div>
+
+            <p class="text-sm text-slate-500">
+                Sesuaikan dengan minat dan kemampuan Anda.
+            </p>
+        </div>
+
+    </div>
+
+    {{-- ALUR --}}
+    <div class="border rounded-2xl p-8 mb-8">
+
+        <h3 class="text-2xl font-bold text-center mb-10">
+            Alur Proses Pengajuan
+        </h3>
+
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-green-600 text-white flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+                    1
+                </div>
+
+                <h4 class="font-semibold">Submission</h4>
+
+                <p class="text-sm text-slate-500 mt-2">
+                    Upload proposal dan dokumen pendukung
+                </p>
+            </div>
+
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-indigo-500 text-white flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+                    2
+                </div>
+
+                <h4 class="font-semibold">Review HRD</h4>
+
+                <p class="text-sm text-slate-500 mt-2">
+                    HRD melakukan seleksi proposal
+                </p>
+            </div>
+
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-slate-500 text-white flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+                    3
+                </div>
+
+                <h4 class="font-semibold">Pengumuman</h4>
+
+                <p class="text-sm text-slate-500 mt-2">
+                    Mahasiswa diterima atau ditolak
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- CHECKBOX --}}
+    <div class="text-center">
+
+        <label class="inline-flex items-center gap-3 mb-6">
+            <input type="checkbox"
+                   id="checkPanduan"
+                   class="w-5 h-5 rounded border-slate-300">
+
+            <span class="text-slate-700">
+                Saya telah membaca dan memahami seluruh ketentuan magang
+            </span>
+        </label>
+
+        <div>
+            <a href="{{ route('mahasiswa.proposal.create') }}"
+               id="btnMulai"
+               class="pointer-events-none opacity-50 inline-flex items-center gap-2 px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-full text-lg font-semibold transition">
+                Mulai Pengajuan
+            </a>
+        </div>
+
+    </div>
+
 </div>
+
+<script>
+    const check = document.getElementById('checkPanduan');
+    const btn = document.getElementById('btnMulai');
+
+    check.addEventListener('change', function () {
+
+        if(this.checked){
+            btn.classList.remove('opacity-50');
+            btn.classList.remove('pointer-events-none');
+        }else{
+            btn.classList.add('opacity-50');
+            btn.classList.add('pointer-events-none');
+        }
+
+    });
+</script>
+
+@endif
 
 <!-- Proposals List -->
 <div class="space-y-4">
@@ -77,29 +204,6 @@
         </div>
     @empty
         
-        <!-- Empty State -->
-        <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden border border-slate-200">
-            <div class="p-12 text-center">
-                <div class="mx-auto h-16 w-16 text-slate-300 mb-4">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </div>
-                <h3 class="text-base font-semibold text-slate-900">Belum ada proposal</h3>
-                <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
-                    Ajukan proposal magang kamu sekarang untuk memulai proses magang.
-                </p>
-                <div class="mt-6">
-                    <a href="{{ route('mahasiswa.proposal.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow-sm transition">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Ajukan Sekarang
-                    </a>
-                </div>
-            </div>
-        </div>
-
     @endforelse
 
     <!-- Pagination -->
